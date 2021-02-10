@@ -5,14 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../dbutil/Conn.class.php');
-
+require_once('../dbutil/ConnAPEX.class.php');
 /**
  * Description of AtualizaAplicDAO
  *
  * @author anderson
  */
-class AtualAplicDAO extends Conn {
+class AtualAplicDAO extends ConnAPEX {
 
     /** @var PDOStatement */
     private $Read;
@@ -20,14 +19,14 @@ class AtualAplicDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function verAtual($equip, $base) {
+    public function verAtual($aparelho, $base) {
 
         $select = "SELECT "
                 . " COUNT(*) AS QTDE "
                 . " FROM "
                 . " PCA_ATUALIZACAO "
                 . " WHERE "
-                . " NRO_EQUIP = " . $equip;
+                . " NRO_APARELHO = " . $aparelho;
 
         $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);

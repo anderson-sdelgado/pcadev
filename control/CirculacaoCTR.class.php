@@ -5,14 +5,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/PassageiroDAO.class.php');
+require_once('../model/dao/CirculacaoDAO.class.php');
 require_once('../model/dao/LogDAO.class.php');
 /**
- * Description of PassageiroCTR
+ * Description of CirculacaoCTR
  *
  * @author anderson
  */
-class PassageiroCTR {
+class CirculacaoCTR {
     
     private $base = 1;
     
@@ -23,32 +23,31 @@ class PassageiroCTR {
         $this->salvarLog($dados, $pagina);
 
         $versao = str_replace("_", ".", $versao);
-
         
         if ($versao >= 1.00) {
             
-            $jsonObjPassageiro = json_decode($dados);
-            $dadosPassageiro = $jsonObjPassageiro->passageiro;
-            $ret = $this->salvarPassageiro($dadosPassageiro);
+            $jsonObjCirculacao = json_decode($dados);
+            $dadosCirculacao = $jsonObjCirculacao->circulacao;
+            $ret = $this->salvarCirculacao($dadosCirculacao);
 
             return $ret;
         }
     }
     
-    private function salvarPassageiro($dadosPassageiro) {
-        $passageiroDAO = new PassageiroDAO();
-        $idPassagArray = array();
-        foreach ($dadosPassageiro as $passag) {
-            $v = $passageiroDAO->verifPassageiro($passag, $this->base);
+    private function salvarCirculacao($dadosCirculacao) {
+        $circulacaoDAO = new CirculacaoDAO();
+        $idCirculacaoArray = array();
+        foreach ($dadosCirculacao as $circulacao) {
+            $v = $circulacaoDAO->verifCirculacao($circulacao, $this->base);
             if ($v == 0) {
-                $passageiroDAO->insPassageiro($passag, $this->base);
+                $circulacaoDAO->insCirculacao($circulacao, $this->base);
             }
-            $idPassagArray[] = array("idPassageiro" => $passag->idPassageiro);
+            $idCirculacaoArray[] = array("idCirculacao" => $circulacao->idCirculacao);
         }
-        $dadoPassag = array("passageiro"=>$idPassagArray);
-        $retPassag = json_encode($dadoPassag);
+        $dadoCirculacao = array("passageiro"=>$idCirculacaoArray);
+        $retCirculacao = json_encode($dadoCirculacao);
         
-        return 'SALVOU_' . $retPassag;
+        return 'SALVOU_' . $retCirculacao;
     }
     
     private function salvarLog($dados, $pagina) {

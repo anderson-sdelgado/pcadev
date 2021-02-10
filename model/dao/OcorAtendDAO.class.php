@@ -5,41 +5,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../dbutil/Conn.class.php');
+require_once('../dbutil/ConnAPEX.class.php');
 /**
  * Description of FuncDAO
  *
  * @author anderson
  */
-class OcorAtendDAO extends Conn {
+class OcorAtendDAO extends ConnAPEX {
     //put your code here
     
     public function dados($base) {
 
         $select = " SELECT "
-                    . " MATRIC AS \"matricColab\" "
-                    . " , NOME AS \"nomeColab\" "
+                    . " ID AS \"idOcorAtend\" "
+                    . " , DESCR AS \"descrOcorAtend\" "
                 . " FROM "
-                    . " VIEW_PCO_PASSAGEIRO ";
-        
-        $this->Conn = parent::getConn($base);
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
-        return $result;
-        
-    }
-    
-    public function atual($colab, $base) {
-
-        $select = " SELECT "
-                    . " MATRIC AS \"matricColab\" "
-                    . " , NOME AS \"nomeColab\" "
-                . " FROM "
-                    . " VIEW_PCO_PASSAGEIRO"
-                . " WHERE MATRIC = " . $colab;
+                    . " OCOR_ATENDIMENTO ";
         
         $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);

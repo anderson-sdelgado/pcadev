@@ -5,13 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../dbutil/Conn.class.php');
+require_once('../dbutil/ConnAPEX.class.php');
 /**
  * Description of EquipDAO
  *
  * @author anderson
  */
-class LocalDAO extends Conn {
+class LocalDAO extends ConnAPEX {
     //put your code here
 
     /** @var PDOStatement */
@@ -20,13 +20,15 @@ class LocalDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($equip, $base) {
+    public function dados($base) {
 
         $select = " SELECT "
-                . " E.EQUIP_ID AS \"idEquip\" "
-                . " , E.NRO_EQUIP AS \"nroEquip\" "
+                    . " ID AS \"idLocal\" "
+                    . " , DESCR AS \"descrLocal\" "
+                    . " , SAIDA AS \"flagSaidaLocal\" "
+                    . " , DESTINO AS \"flagDestinoLocal\" "
                 . " FROM "
-                . " V_EQUIP E ";
+                    . " LOCAL_AMBULANCIA ";
 
         $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);

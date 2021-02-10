@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 require_once('../model/dao/ColabDAO.class.php');
-require_once('../model/dao/MotoristaDAO.class.php');
 require_once('../model/dao/EquipDAO.class.php');
-require_once('../model/dao/TurnoDAO.class.php');
+require_once('../model/dao/LocalDAO.class.php');
+require_once('../model/dao/OcorAtendDAO.class.php');
 /**
  * Description of BaseDadosCTR
  *
@@ -16,7 +16,7 @@ require_once('../model/dao/TurnoDAO.class.php');
  */
 class BaseDadosCTR {
     
-    private $base = 1;
+    private $base = 2;
 
     public function dadosColab($versao) {
         
@@ -34,63 +34,8 @@ class BaseDadosCTR {
         }
         
     }
-    
-    public function atualColab($versao, $info) {
 
-        $versao = str_replace("_", ".", $versao);
-        
-        if($versao >= 1.00){
-        
-            $colabDAO = new ColabDAO();
-
-            $dado = $info['dado'];
-
-            $dadosEquip = array("dados" => $colabDAO->atual($dado, $this->base));
-            $resEquip = json_encode($dadosEquip);
-            
-            return $resEquip;
-        
-        }
-        
-    }
-    
-    public function dadosMoto($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-        
-        $motoristaDAO = new MotoristaDAO();
-        
-        if($versao >= 1.00){
-        
-            $dados = array("dados"=>$motoristaDAO->dados($this->base));
-            $json_str = json_encode($dados);
-
-            return $json_str;
-        
-        }
-        
-    }
-    
-    public function atualMoto($versao, $info) {
-
-        $versao = str_replace("_", ".", $versao);
-        
-        if($versao >= 1.00){
-        
-            $motoristaDAO = new MotoristaDAO();
-
-            $dado = $info['dado'];
-
-            $dadosEquip = array("dados" => $motoristaDAO->atual($dado, $this->base));
-            $resEquip = json_encode($dadosEquip);
-            
-            return $resEquip;
-        
-        }
-        
-    }
-    
-    public function dadosEquip($versao, $info) {
+    public function dadosEquip($versao) {
 
         $versao = str_replace("_", ".", $versao);
         
@@ -98,9 +43,7 @@ class BaseDadosCTR {
         
             $equipDAO = new EquipDAO();
 
-            $dado = $info['dado'];
-
-            $dadosEquip = array("dados" => $equipDAO->dados($dado, $this->base));
+            $dadosEquip = array("dados" => $equipDAO->dados($this->base));
             $resEquip = json_encode($dadosEquip);
             
             return $resEquip;
@@ -109,18 +52,35 @@ class BaseDadosCTR {
         
     }
     
-    public function dadosTurno($versao) {
+    public function dadosLocal($versao) {
 
         $versao = str_replace("_", ".", $versao);
         
         if($versao >= 1.00){
         
-            $turnoDAO = new TurnoDAO();
+            $localDAO = new LocalDAO();
 
-            $dados = array("dados"=>$turnoDAO->dados($this->base));
-            $json_str = json_encode($dados);
+            $dadosLocal = array("dados" => $localDAO->dados($this->base));
+            $resLocal = json_encode($dadosLocal);
+            
+            return $resLocal;
+        
+        }
+        
+    }
+    
+    public function dadosOcorAtend($versao) {
 
-            return $json_str;
+        $versao = str_replace("_", ".", $versao);
+        
+        if($versao >= 1.00){
+        
+            $ocorAtendDAO = new OcorAtendDAO();
+
+            $dadosOcorAtend = array("dados" => $ocorAtendDAO->dados($this->base));
+            $resOcorAtend = json_encode($dadosOcorAtend);
+            
+            return $resOcorAtend;
         
         }
         

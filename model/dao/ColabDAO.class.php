@@ -32,23 +32,4 @@ class ColabDAO extends Conn {
         
     }
     
-    public function atual($colab, $base) {
-
-        $select = " SELECT "
-                    . " MATRIC AS \"matricColab\" "
-                    . " , NOME AS \"nomeColab\" "
-                . " FROM "
-                    . " VIEW_PCO_PASSAGEIRO"
-                . " WHERE MATRIC = " . $colab;
-        
-        $this->Conn = parent::getConn($base);
-        $this->Read = $this->Conn->prepare($select);
-        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
-        $this->Read->execute();
-        $result = $this->Read->fetchAll();
-
-        return $result;
-        
-    }
-    
 }

@@ -12,18 +12,18 @@ require_once('../model/dao/AjusteDataHoraDAO.class.php');
  *
  * @author anderson
  */
-class PassageiroDAO extends Conn {
+class CirculacaoDAO extends Conn {
     
-    public function verifPassageiro($passageiro, $base) {
+    public function verifCirculacao($circulacao, $base) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
                 . " FROM "
-                . " PCO_PASSAGEIRO "
+                . " PCA_CIRCULACAO "
                 . " WHERE "
-                . " DTHR_CEL = TO_DATE('" . $passageiro->dthrPassageiro . "','DD/MM/YYYY HH24:MI')"
+                . " DTHR_SAIDA_CEL = TO_DATE('" . $circulacao->dthrSaidaCirculacao . "','DD/MM/YYYY HH24:MI')"
                 . " AND "
-                . " MATRIC_COLAB = " . $passageiro->matricColabPassageiro;
+                . " NRO_APARELHO = " . $circulacao->nroAparelhoCirculacao;
 
         $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
@@ -38,30 +38,48 @@ class PassageiroDAO extends Conn {
         return $v;
     }
 
-    public function insPassageiro($passageiro, $base) {
+    public function insCirculacao($circulacao, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
+        
+        if ($circulacao->kmSaidaCirculacao > 9999999) {
+            $circulacao->kmSaidaCirculacao = 0;
+        }
 
-        $sql = "INSERT INTO PCO_PASSAGEIRO ("
-                . " DTHR_VIAGEM "
-                . " , DTHR_VIAGEM_CEL "
-                . " , EQUIP_ID "
+        if ($circulacao->kmRetornoCirculacao > 9999999) {
+            $circulacao->kmRetornoCirculacao = 0;
+        }
+        
+        $sql = "INSERT INTO PCA_CIRCULACAO ("
+                . " NRO_APARELHO "
+                . " , DTHR_SAIDA "
+                . " , DTHR_SAIDA_CEL "
+                . " , DTHR_RETORNO "
+                . " , DTHR_RETORNO_CEL "
                 . " , MATRIC_MOTORISTA "
-                . " , TURNO_ID "
-                . " , MATRIC_COLAB "
-                . " , DTHR "
-                . " , DTHR_CEL "
+                . " , MATRIC_PACIENTE "
+                . " , EQUIP_ID "
+                . " , HOD_HOR_SAIDA "
+                . " , HOD_HOR_RETORNO "
+                . " , LOCAL_SAIDA_ID "
+                . " , LOCAL_DESTINO_ID "
+                . " , OCOR_ATEND_ID "
                 . " , DTHR_TRANS "
                 . " ) "
                 . " VALUES ("
-                . " " . $ajusteDataHoraDAO->dataHoraGMT($passageiro->dthrViagemPassageiro, $base)
-                . " , TO_DATE('" . $passageiro->dthrViagemPassageiro . "','DD/MM/YYYY HH24:MI')"
-                . " , " . $passageiro->idEquipPassageiro
-                . " , " . $passageiro->matricMotoPassageiro
-                 . " , " . $passageiro->idTurnoPassageiro
-                . " , " . $passageiro->matricColabPassageiro
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($passageiro->dthrPassageiro, $base)
-                . " , TO_DATE('" . $passageiro->dthrPassageiro . "','DD/MM/YYYY HH24:MI')"
+                . " " . $circulacao->nroAparelhoCirculacao
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($circulacao->dthrSaidaCirculacao, $base)
+                . " , TO_DATE('" . $circulacao->dthrSaidaCirculacao . "','DD/MM/YYYY HH24:MI')"
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($circulacao->dthrRetornoCirculacao, $base)
+                . " , TO_DATE('" . $circulacao->dthrRetornoCirculacao . "','DD/MM/YYYY HH24:MI')"
+                . " , " . $circulacao->matricMotoristaCirculacao
+                . " , " . $circulacao->matricPacienteCirculacao
+                 . " , " . $circulacao->idEquipCirculacao
+                . " , " . $circulacao->kmSaidaCirculacao
+                . " , " . $circulacao->kmRetornoCirculacao
+                . " , " . $circulacao->idLocalSaidaCirculacao
+                . " , " . $circulacao->idLocalDestinoCirculacao
+                . " , " . $circulacao->idOcorAtendCirculacao
                 . " , SYSDATE "
                 . " )";
 

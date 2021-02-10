@@ -13,7 +13,7 @@ require_once('../model/dao/AtualAplicDAO.class.php');
  */
 class AtualAplicCTR {
     
-    private $base = 1;
+    private $base = 2;
     
     public function atualAplic($versao, $info) {
 
@@ -28,26 +28,26 @@ class AtualAplicCTR {
 
             foreach ($dados as $d) {
                 $aparelho = $d->nroAparelhoAtual;
-                $va = $d->versaoAtual;
+                $versaoAtual = $d->versaoAtual;
             }
             $retorno = 'N';
-            $v = $atualAplicDAO->verAtual($aparelho, $this->base);
-            if ($v == 0) {
-                $atualAplicDAO->insAtual($aparelho, $va, $this->base);
+            $verif = $atualAplicDAO->verAtual($aparelho, $this->base);
+            if ($verif == 0) {
+                $atualAplicDAO->insAtual($aparelho, $versaoAtual, $this->base);
             } else {
                 $result = $atualAplicDAO->retAtual($aparelho, $this->base);
                 foreach ($result as $item) {
-                    $vn = $item['VERSAO_NOVA'];
-                    $vab = $item['VERSAO_ATUAL'];
+                    $versaoNovo = $item['VERSAO_NOVA'];
+                    $versaoAtualBD = $item['VERSAO_ATUAL'];
                 }
-                if ($va != $vab) {
-                    $atualAplicDAO->updAtualNova($aparelho, $va, $this->base);
+                if ($versaoAtual != $versaoAtualBD) {
+                    $atualAplicDAO->updAtualNova($aparelho, $versaoAtual, $this->base);
                 } else {
-                    if ($va != $vn) {
+                    if ($versaoAtual != $versaoNovo) {
                         $retorno = 'S';
                     } else {
-                        if (strcmp($va, $vab) <> 0) {
-                            $atualAplicDAO->updAtual($aparelho, $va, $this->base);
+                        if (strcmp($versaoAtual, $versaoAtualBD) <> 0) {
+                            $atualAplicDAO->updAtual($aparelho, $versaoAtual, $this->base);
                         }
                     }
                 }
