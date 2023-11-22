@@ -16,48 +16,17 @@ class ConnAPEX {
      * Conecta com o banco de dados com o pattern singleton.
      * Retorna um objeto PDO!
      */
-    private static function Conectar($base) {
+    private static function Conectar() {
         try {
 
             if (self::$Connect == null) {
-                if ($base == 1) {
-                    $tns = "  (DESCRIPTION =
-                                (ADDRESS_LIST =
-                                  (ADDRESS = (PROTOCOL = TCP)(HOST = stafe-scan)(PORT = 1521))
-                                )
-                                (CONNECT_DATA =
-                                  (SERVER = DEDICATED)
-                                  (SERVICE_NAME = apex)
-                                )
-                              )";
-                } elseif ($base == 2) {
-                    $tns = " (DESCRIPTION =
-                                  (ADDRESS_LIST =
-                                    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.2.15)(PORT = 1521))
-                                    (LOAD_BALANCE = yes)
-                                  )
-                                  (CONNECT_DATA =
-                                    (SERVER = DEDICATED)
-                                    (SERVICE_NAME = APEXQA)
-                                    (FAILOVER_MODE =
-                                      (TYPE = SELECT)
-                                      (METHOD = BASIC)
-                                      (RETRIES = 180)
-                                      (DELAY = 5)
-                                    )
-                                  )
-                                )";
-                } elseif ($base == 3) {
-                    $tns = "  (DESCRIPTION =
-                                    (ADDRESS_LIST =
-                                      (ADDRESS = (PROTOCOL = TCP)(HOST = stafe-scan)(PORT = 1521))
-                                    )
-                                    (CONNECT_DATA =
-                                      (SERVER = DEDICATED)
-                                      (SERVICE_NAME = apexdev)
-                                    )
-                                  )";
-                }
+                $tns = "(DESCRIPTION =
+                            (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.2.10)(PORT = 1521))
+                            (CONNECT_DATA =
+                              (SERVER = DEDICATED)
+                              (SERVICE_NAME = APEXDEV)
+                            )
+                          )";
 
                 self::$Connect = new PDO("oci:dbname=" . $tns . ';charset=utf8', 'STAFE', 'STA1553');
             }
@@ -70,8 +39,8 @@ class ConnAPEX {
         return self::$Connect;
     }
 
-    protected static function getConn($base) {
-        return self::Conectar($base);
+    protected static function getConn() {
+        return self::Conectar();
     }
 
 }

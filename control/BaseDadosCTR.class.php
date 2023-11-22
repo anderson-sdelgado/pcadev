@@ -5,10 +5,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/ColabDAO.class.php');
-require_once('../model/dao/EquipDAO.class.php');
-require_once('../model/dao/LocalDAO.class.php');
-require_once('../model/dao/OcorAtendDAO.class.php');
+require_once('../control/AtualAplicCTR.class.php');
+require_once('../model/ColabDAO.class.php');
+require_once('../model/EquipDAO.class.php');
+require_once('../model/LocalDAO.class.php');
+require_once('../model/OcorAtendDAO.class.php');
 /**
  * Description of BaseDadosCTR
  *
@@ -16,34 +17,32 @@ require_once('../model/dao/OcorAtendDAO.class.php');
  */
 class BaseDadosCTR {
     
-    private $base = 2;
+    public function dadosColab($info) {
 
-    public function dadosColab($versao) {
+        $atualAplicCTR = new AtualAplicCTR();
         
-        $versao = str_replace("_", ".", $versao);
-        
-        $colabDAO = new ColabDAO();
-        
-        if($versao >= 1.00){
-        
-            $dados = array("dados"=>$colabDAO->dados($this->base));
+        if($atualAplicCTR->verifToken($info)){
+
+            $colabDAO = new ColabDAO();
+
+            $dados = array("dados"=>$colabDAO->dados());
             $json_str = json_encode($dados);
 
             return $json_str;
-        
+            
         }
         
     }
 
-    public function dadosEquip($versao) {
+    public function dadosEquip($info) {
 
-        $versao = str_replace("_", ".", $versao);
+        $atualAplicCTR = new AtualAplicCTR();
         
-        if($versao >= 1.00){
-        
+        if($atualAplicCTR->verifToken($info)){
+
             $equipDAO = new EquipDAO();
 
-            $dadosEquip = array("dados" => $equipDAO->dados($this->base));
+            $dadosEquip = array("dados" => $equipDAO->dados());
             $resEquip = json_encode($dadosEquip);
             
             return $resEquip;
@@ -52,15 +51,15 @@ class BaseDadosCTR {
         
     }
     
-    public function dadosLocal($versao) {
+    public function dadosLocal($info) {
 
-        $versao = str_replace("_", ".", $versao);
+        $atualAplicCTR = new AtualAplicCTR();
         
-        if($versao >= 1.00){
-        
+        if($atualAplicCTR->verifToken($info)){
+
             $localDAO = new LocalDAO();
 
-            $dadosLocal = array("dados" => $localDAO->dados($this->base));
+            $dadosLocal = array("dados" => $localDAO->dados());
             $resLocal = json_encode($dadosLocal);
             
             return $resLocal;
@@ -69,15 +68,15 @@ class BaseDadosCTR {
         
     }
     
-    public function dadosOcorAtend($versao) {
+    public function dadosOcorAtend($info) {
 
-        $versao = str_replace("_", ".", $versao);
+        $atualAplicCTR = new AtualAplicCTR();
         
-        if($versao >= 1.00){
-        
+        if($atualAplicCTR->verifToken($info)){
+
             $ocorAtendDAO = new OcorAtendDAO();
 
-            $dadosOcorAtend = array("dados" => $ocorAtendDAO->dados($this->base));
+            $dadosOcorAtend = array("dados" => $ocorAtendDAO->dados());
             $resOcorAtend = json_encode($dadosOcorAtend);
             
             return $resOcorAtend;

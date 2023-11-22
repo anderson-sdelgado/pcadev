@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/AtualAplicDAO.class.php');
+require_once('../model/AtualAplicDAO.class.php');
 /**
  * Description of AtualAplicativoCTR
  *
@@ -13,54 +13,64 @@ require_once('../model/dao/AtualAplicDAO.class.php');
  */
 class AtualAplicCTR {
     
-    private $base = 2;
+    public function inserirDados($info){
+        
+        $jsonObj = json_decode($info['dado']);
+        $dados = $jsonObj->dados;
+
+        foreach ($dados as $d) {
+            $nroAparelho = $d->nroAparelho;
+            $versao = $d->versao;
+        }
+        
+        return $this->inserirAtualVersao($nroAparelho, $versao);
+        
+    }
     
-    public function atualAplic($versao, $info) {
+    public function inserirAtualVersao($nroAparelho, $versao) {
+        $atualAplicDAO = new AtualAplicDAO();
+        $v = $atualAplicDAO->verAtual($nroAparelho);
+        if ($v == 0) {
+            $atualAplicDAO->insAtual($nroAparelho, $versao);
+        } else {
+            $atualAplicDAO->updAtual($nroAparelho, $versao);
+        }
+        $dado = array("nroAparelho" => $nroAparelho);
+        return json_encode(array("dados" =>array($dado)));
+    }
 
-        $versao = str_replace("_", ".", $versao);
+    public function verifToken($info){
         
-        if($versao >= 1.00){
-        
-            $atualAplicDAO = new AtualAplicDAO();
+        $jsonObj = json_decode($info['dado']);
+        $dados = $jsonObj->dados;
 
-            $jsonObj = json_decode($info['dado']);
-            $dados = $jsonObj->dados;
-
-            foreach ($dados as $d) {
-                $aparelho = $d->nroAparelhoAtual;
-                $versaoAtual = $d->versaoAtual;
-            }
-            $retorno = 'N';
-            $verif = $atualAplicDAO->verAtual($aparelho, $this->base);
-            if ($verif == 0) {
-                $atualAplicDAO->insAtual($aparelho, $versaoAtual, $this->base);
-            } else {
-                $result = $atualAplicDAO->retAtual($aparelho, $this->base);
-                foreach ($result as $item) {
-                    $versaoNovo = $item['VERSAO_NOVA'];
-                    $versaoAtualBD = $item['VERSAO_ATUAL'];
-                }
-                if ($versaoAtual != $versaoAtualBD) {
-                    $atualAplicDAO->updAtualNova($aparelho, $versaoAtual, $this->base);
-                } else {
-                    if ($versaoAtual != $versaoNovo) {
-                        $retorno = 'S';
-                    } else {
-                        if (strcmp($versaoAtual, $versaoAtualBD) <> 0) {
-                            $atualAplicDAO->updAtual($aparelho, $versaoAtual, $this->base);
-                        }
-                    }
-                }
-            }
-            $dthr = $atualAplicDAO->dataHora($this->base);
-            if ($retorno == 'S') {
-                return $retorno;
-            } else {
-                return $retorno . "#" . $dthr;
-            }
+        foreach ($dados as $d) {
+            $token = $d->token;
+        }
         
+        $atualAplicDAO = new AtualAplicDAO();
+        $v = $atualAplicDAO->verToken($token);
+        
+        if ($v > 0) {
+            return true;
+        } else {
+            return false;
         }
         
     }
     
+    public function verToken($headers){
+        
+        $token = trim(substr($headers['Authorization'], 6));
+        $atualAplicDAO = new AtualAplicDAO();
+        $v = $atualAplicDAO->verToken($token);
+        
+        if ($v > 0) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
+
 }

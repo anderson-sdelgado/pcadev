@@ -14,15 +14,15 @@ require_once('../dbutil/ConnAPEX.class.php');
 class OcorAtendDAO extends ConnAPEX {
     //put your code here
     
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT "
-                    . " ID AS \"idOcorAtend\" "
-                    . " , DESCR AS \"descrOcorAtend\" "
-                . " FROM "
-                    . " OCOR_ATENDIMENTO ";
+                        . " ID AS \"idOcorAtend\" "
+                        . " , DESCR AS \"descrOcorAtend\" "
+                    . " FROM "
+                        . " OCOR_ATENDIMENTO ";
         
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

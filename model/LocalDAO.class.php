@@ -20,17 +20,17 @@ class LocalDAO extends ConnAPEX {
     /** @var PDO */
     private $Conn;
 
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT "
-                    . " ID AS \"idLocal\" "
-                    . " , DESCR AS \"descrLocal\" "
-                    . " , SAIDA AS \"flagSaidaLocal\" "
-                    . " , DESTINO AS \"flagDestinoLocal\" "
-                . " FROM "
-                    . " LOCAL_AMBULANCIA ";
+                        . " ID AS \"idLocal\" "
+                        . " , DESCR AS \"descrLocal\" "
+                        . " , SAIDA AS \"flagSaidaLocal\" "
+                        . " , DESTINO AS \"flagDestinoLocal\" "
+                    . " FROM "
+                        . " LOCAL_AMBULANCIA ";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

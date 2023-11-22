@@ -14,15 +14,15 @@ require_once('../dbutil/Conn.class.php');
 class ColabDAO extends Conn {
     //put your code here
     
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT "
-                    . " MATRIC AS \"matricColab\" "
-                    . " , NOME AS \"nomeColab\" "
-                . " FROM "
-                    . " VIEW_PCO_PASSAGEIRO ";
+                        . " MATRIC AS \"matricColab\" "
+                        . " , NOME AS \"nomeColab\" "
+                    . " FROM "
+                        . " VIEW_PCO_PASSAGEIRO ";
         
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
