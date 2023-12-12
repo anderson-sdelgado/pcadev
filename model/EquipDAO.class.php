@@ -23,22 +23,28 @@ class EquipDAO extends ConnAPEX {
     public function dados() {
 
         $select = " SELECT "
-                        . " eq.EQUIP_ID AS \"idEquip\" "
-                        . " , eq.NRO_EQUIP AS \"nroEquip\" "
-                        . " , co.descr AS \"descrClasseEquip\" "
-                    . " from equip              eq "
-                        . " , modelo_equip       me "
-                        . " , fabric             fa "
-                        . " , classe_oper        co "
-                        . " , empr_usu           eu"
-                        . " , PCA_AMBULANCIA a "
+                        . " EQ.EQUIP_ID AS \"idEquip\" "
+                        . " , EQ.NRO_EQUIP AS \"nroEquip\" "
+                        . " , CO.DESCR AS \"descrClasseEquip\" "
+                    . " FROM  "
+                        . " EQUIP                EQ "
+                        . " , MODELO_EQUIP       ME "
+                        . " , FABRIC             FA "
+                        . " , CLASSE_OPER        CO "
+                        . " , EMPR_USU           EU "
+                        . " , PCA_AMBULANCIA    A "
                     . " where "
-                      . " eq.equip_id = a.equip_id "
-                      . " and me.modelequip_id    = eq.modelequip_id "
-                      . " and fa.fabric_id        = me.fabric_id "
-                      . " and co.classoper_id     = eq.classoper_id "
-                      . " and eu.emprusu_id       = eq.emprusu_id "
-                      . " and (eq.dt_desat  is null or dt_desat >= trunc(sysdate))";
+                        . " EQ.EQUIP_ID = A.EQUIP_ID "
+                        . " AND "
+                        . " ME.MODELEQUIP_ID    = EQ.MODELEQUIP_ID "
+                        . " AND "
+                        . " FA.FABRIC_ID        = ME.FABRIC_ID "
+                        . " AND "
+                        . " CO.CLASSOPER_ID     = EQ.CLASSOPER_ID "
+                        . " AND "
+                        . " EU.EMPRUSU_ID       = EQ.EMPRUSU_ID "
+                        . " AND "
+                        . " (EQ.DT_DESAT  IS NULL OR DT_DESAT >= TRUNC(SYSDATE))";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

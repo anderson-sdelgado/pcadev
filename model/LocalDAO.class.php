@@ -25,8 +25,6 @@ class LocalDAO extends ConnAPEX {
         $select = " SELECT "
                         . " ID AS \"idLocal\" "
                         . " , DESCR AS \"descrLocal\" "
-                        . " , SAIDA AS \"flagSaidaLocal\" "
-                        . " , DESTINO AS \"flagDestinoLocal\" "
                     . " FROM "
                         . " LOCAL_AMBULANCIA ";
 
